@@ -5,6 +5,7 @@
 #include "PluginProcessor.h"
 #include "CONSTANTS.h"
 #include "utils/json.h"
+#include "utils/ZipUtils.h"
 
 //==============================================================================
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p)
@@ -63,8 +64,11 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 
   setSize(800, 500);
 
-  this->webComponent.goToURL(OPTS::DEV_URL);
-  // this->webComponent.goToURL(juce::WebBrowserComponent::getResourceProviderRoot());
+  #ifdef JUCE_DEBUG
+    this->webComponent.goToURL(OPTS::DEV_URL);
+  #else
+    this->webComponent.goToURL(juce::WebBrowserComponent::getResourceProviderRoot());
+  #endif
 
   addAndMakeVisible(this->webComponent);
 
@@ -88,9 +92,29 @@ void AudioPluginAudioProcessorEditor::resized()
 
 std::optional<juce::WebBrowserComponent::Resource> AudioPluginAudioProcessorEditor::getResource(const juce::String &url)
 {
+  try
+  {
 
-  juce::ignoreUnused(url);
+    // get path
+    juce::String path = url == "/" ? "index.html" : url.fromFirstOccurrenceOf("/", /* includeSubstring: */ false, false);
 
-  // return std::optional<juce::WebBrowserComponent::Resource>();
+    // attempt to find in zip archive
+    auto *zip = ZipUtils::getClientZip();
+    if (zip)
+    {
+      auto *entry = zip->getEntry(path, true);
+      if (!entry)
+        throw 0;
+
+      auto stream = juce::rawToUniquePtr(zip->createStreamForEntry(*entry));
+      auto buffer = ZipUtils::bufferFrom(*stream);
+      auto mime = ZipUtils::getMimeType(entry->filename);
+
+      return juce::WebBrowserComponent::Resource{std::move(buffer), std::move(mime)};
+    }
+  }
+  catch (int &)
+  {
+  }
   return std::nullopt;
 }

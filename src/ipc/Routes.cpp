@@ -3,9 +3,12 @@
 #include "../utils/json.h"
 
 Routes::Routes()
+    : routes{
+          {{"announce"}, [this](auto &p)
+           { return routeAnnounce(p); }},
+          // ,{{ "" }, [this](auto &p){return route(p);}}
+      }
 {
-  routes["announce"] = [this](auto &p)
-  { return routeAnnounce(p); };
 }
 
 // --------------------------------------------

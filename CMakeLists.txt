@@ -39,16 +39,17 @@ target_sources(AudioPlugin
   src/PluginEditor.cpp
   src/PluginProcessor.cpp
   src/ipc/Routes.cpp
+  src/utils/ZipUtils.cpp
 )
 
 # register source tree
-file(GLOB_RECURSE SOURCE_FILES src/*)
-source_group("0_SRC" TREE ../src PREFIX "0_SRC" FILES ${SOURCE_FILES})
+# file(GLOB_RECURSE SOURCE_FILES src/*)
+# source_group("0_SRC" TREE ../src PREFIX "0_SRC" FILES ${SOURCE_FILES})
 
 # add binary data
 juce_add_binary_data(AudioPluginData
   SOURCES
-  assets/nl.png
+  assets/client.zip
 )
 
 target_link_libraries(AudioPlugin

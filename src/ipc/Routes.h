@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <unordered_map>
 #include <string>
 
 #include <JuceHeader.h>
@@ -8,7 +8,7 @@
 class Routes
 {
 private:
-  std::map<std::string, std::function<juce::var(juce::var &)>> routes;
+  std::unordered_map<std::string, std::function<juce::var(juce::var &)>> routes;
 
   juce::var _defaultRoute();
 
