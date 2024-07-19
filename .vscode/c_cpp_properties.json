@@ -6,7 +6,15 @@
         "${workspaceFolder}/build/**",
         "${workspaceFolder}/_JUCE/modules"
       ],
-      "defines": ["_DEBUG", "UNICODE", "_UNICODE"],
+      "defines": [
+        "_DEBUG",
+        "UNICODE",
+        "_UNICODE",
+
+        "JUCE_WINDOWS=1",
+        "JUCE_TARGET_HAS_BINARY_DATA=1",
+        "JUCE_USE_WIN_WEBVIEW2=1"
+      ],
       "windowsSdkVersion": "10.0.22621.0",
       "compilerPath": "cl.exe",
       "cStandard": "c17",

@@ -38,6 +38,7 @@ target_sources(AudioPlugin
 
   src/PluginEditor.cpp
   src/PluginProcessor.cpp
+  src/ipc/Routes.cpp
 )
 
 # register source tree

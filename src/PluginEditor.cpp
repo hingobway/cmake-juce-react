@@ -1,24 +1,74 @@
 #include "PluginEditor.h"
 
+#include <map>
+
 #include "PluginProcessor.h"
+#include "CONSTANTS.h"
+#include "utils/json.h"
 
 //==============================================================================
-AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor& p)
-  : AudioProcessorEditor(&p), processorRef(p)
+AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p)
+    : AudioProcessorEditor(&p), processorRef(p), routes(),
+      webComponent{
+          juce::WebBrowserComponent::Options{}
+              .withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
+              .withWinWebView2Options(juce::WebBrowserComponent::Options::WinWebView2{}.withUserDataFolder(juce::File::getSpecialLocation(juce::File::SpecialLocationType::tempDirectory)))
+              .withNativeIntegrationEnabled()
+
+              .withResourceProvider([this](const auto &url)
+                                    { return this->getResource(url); })
+
+              .withNativeFunction(
+                  "command", [this](auto &vars, auto resolve)
+                  {
+                  try
+                  {
+                    const juce::Array<juce::var> &v = vars;
+                    juce::var input = v[0];
+
+                    if (!input.isObject())
+                      throw Routes::err("INVALID_REQUEST");
+
+                    // get command type
+                    auto ts = input.getProperty("type", juce::var::undefined());
+                    if (!ts.isString())
+                      throw Routes::err("INVALID_TYPE");
+
+                    juce::String type = ts.toString();
+                    auto params = input.getProperty("data", juce::var::undefined());
+
+                    // TYPE ROUTER
+                    auto data = this->routes.runRoute(type, params);
+
+                    JSON_OBJ(out)
+                    {
+                      out->setProperty("data", data);
+                    }
+
+                    return resolve(juce::JSON::toString(juce::var(out), true));
+                  }
+                  catch(const std::string& e)
+                  {
+                    JSON_OBJ(out)
+                    {
+                      out->setProperty("error", juce::String(e));
+                    }
+
+                    return resolve(juce::JSON::toString(juce::var(out), true));
+                  }
+
+                  /*  */ })}
 {
   juce::ignoreUnused(processorRef);
-  // Make sure that before the constructor has finished, you've set the
-  // editor's size to whatever you need it to be.
-  setSize(400, 300);
 
-  this->webComponent.goToURL("http://localhost:5173");
-  //this->webComponent.goToURL(juce::WebBrowserComponent::getResourceProviderRoot());
+  setSize(800, 500);
+
+  this->webComponent.goToURL(OPTS::DEV_URL);
+  // this->webComponent.goToURL(juce::WebBrowserComponent::getResourceProviderRoot());
 
   addAndMakeVisible(this->webComponent);
 
-
-  DBG("\n\nARE WE HERE??\n\n");
-
+  DBG("\n\nMOUNTED\n\n");
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
@@ -26,11 +76,9 @@ AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 }
 
 //==============================================================================
-void AudioPluginAudioProcessorEditor::paint(juce::Graphics& g)
+void AudioPluginAudioProcessorEditor::paint(juce::Graphics &g)
 {
-  // (Our component is opaque, so we must completely fill the background with a solid colour)
   g.fillAll(juce::Colour(0xff18181b));
-
 }
 
 void AudioPluginAudioProcessorEditor::resized()
@@ -38,7 +86,7 @@ void AudioPluginAudioProcessorEditor::resized()
   this->webComponent.setBounds(getLocalBounds());
 }
 
-std::optional<juce::WebBrowserComponent::Resource> AudioPluginAudioProcessorEditor::getResource(const juce::String& url)
+std::optional<juce::WebBrowserComponent::Resource> AudioPluginAudioProcessorEditor::getResource(const juce::String &url)
 {
 
   juce::ignoreUnused(url);
