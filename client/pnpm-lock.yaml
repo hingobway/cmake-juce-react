@@ -12,8 +12,8 @@ importers:
         specifier: ^0.5.7
         version: 0.5.7(tailwindcss@3.4.6)
       juce:
-        specifier: file:../_JUCE/modules/juce_gui_extra/native/javascript
-        version: juce-framework-frontend@file:../_JUCE/modules/juce_gui_extra/native/javascript
+        specifier: file:../include/JUCE/modules/juce_gui_extra/native/javascript
+        version: juce-framework-frontend@file:../include/JUCE/modules/juce_gui_extra/native/javascript
       lucide-react:
         specifier: ^0.408.0
         version: 0.408.0(react@18.3.1)
@@ -654,8 +654,8 @@ packages:
     resolution: {integrity: sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==}
     engines: {node: '>=6'}
 
-  caniuse-lite@1.0.30001642:
-    resolution: {integrity: sha512-3XQ0DoRgLijXJErLSl+bLnJ+Et4KqV1PY6JJBGAFlsNsz31zeAIncyeZfLCabHK/jtSh+671RM9YMldxjUPZtA==}
+  caniuse-lite@1.0.30001721:
+    resolution: {integrity: sha512-cOuvmUVtKrtEaoKiO0rSc29jcjwMwX5tOHDy4MgVFEWiUXj4uBMJkwI8MDySkgXidpMiHUcviogAvFi4pA2hDQ==}
 
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
@@ -1007,8 +1007,8 @@ packages:
   json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
 
-  juce-framework-frontend@file:../_JUCE/modules/juce_gui_extra/native/javascript:
-    resolution: {directory: ../_JUCE/modules/juce_gui_extra/native/javascript, type: directory}
+  juce-framework-frontend@file:../include/JUCE/modules/juce_gui_extra/native/javascript:
+    resolution: {directory: ../include/JUCE/modules/juce_gui_extra/native/javascript, type: directory}
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -2039,7 +2039,7 @@ snapshots:
   autoprefixer@10.4.19(postcss@8.4.39):
     dependencies:
       browserslist: 4.23.2
-      caniuse-lite: 1.0.30001642
+      caniuse-lite: 1.0.30001721
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.0.1
@@ -2072,7 +2072,7 @@ snapshots:
 
   browserslist@4.23.2:
     dependencies:
-      caniuse-lite: 1.0.30001642
+      caniuse-lite: 1.0.30001721
       electron-to-chromium: 1.4.829
       node-releases: 2.0.17
       update-browserslist-db: 1.1.0(browserslist@4.23.2)
@@ -2099,7 +2099,7 @@ snapshots:
 
   camelcase@5.3.1: {}
 
-  caniuse-lite@1.0.30001642: {}
+  caniuse-lite@1.0.30001721: {}
 
   chalk@4.1.2:
     dependencies:
@@ -2486,7 +2486,7 @@ snapshots:
 
   json-stable-stringify-without-jsonify@1.0.1: {}
 
-  juce-framework-frontend@file:../_JUCE/modules/juce_gui_extra/native/javascript: {}
+  juce-framework-frontend@file:../include/JUCE/modules/juce_gui_extra/native/javascript: {}
 
   keyv@4.5.4:
     dependencies:

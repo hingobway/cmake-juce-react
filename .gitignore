@@ -1,3 +1,4 @@
-_JUCE/
 build/
 .daw/
+
+.DS_Store

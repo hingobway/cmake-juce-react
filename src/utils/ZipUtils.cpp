@@ -1,5 +1,6 @@
-#include "./ZipUtils.h"
 #include "ZipUtils.h"
+
+#include <BinaryData.h>
 
 juce::ZipFile *ZipUtils::getClientZip()
 {

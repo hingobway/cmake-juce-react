@@ -1,6 +1,10 @@
 # cmake-juce-react
 
-electron-style audio plugin with juce backend (using cmake bundling) and react frontend (using vite bundling)
+_\*\*test project\*\*_
+
+---
+
+electron-style audio plugin with juce backend (cmake) and react frontend (vite)
 
 ### screenshot
 

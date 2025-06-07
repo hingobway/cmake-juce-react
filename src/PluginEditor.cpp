@@ -64,11 +64,11 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 
   setSize(800, 500);
 
-  #ifdef JUCE_DEBUG
-    this->webComponent.goToURL(OPTS::DEV_URL);
-  #else
-    this->webComponent.goToURL(juce::WebBrowserComponent::getResourceProviderRoot());
-  #endif
+#ifdef JUCE_DEBUG
+  this->webComponent.goToURL(OPTS::DEV_URL);
+#else
+  this->webComponent.goToURL(juce::WebBrowserComponent::getResourceProviderRoot());
+#endif
 
   addAndMakeVisible(this->webComponent);
 

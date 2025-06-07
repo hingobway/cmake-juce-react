@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "(macOS) Launch DAW",
+      "type": "cppdbg",
+      "MIMode": "lldb",
+      "request": "launch",
+      "preLaunchTask": "CMake: build",
+      "program": "/Applications/REAPER.app",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [
+        {
+          "name": "PATH",
+          "value": "${env:PATH}:${command:cmake.getLaunchTargetDirectory}"
+        }
+      ]
+    },
+    {
+      "name": "(windows) Launch DAW",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "preLaunchTask": "CMake: build",
+      "program": "C:/Program Files/REAPER (x64)/reaper.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [
+        {
+          "name": "PATH",
+          "value": "${env:PATH}:${command:cmake.getLaunchTargetDirectory}"
+        }
+      ]
+    }
+  ]
+}

@@ -1,61 +1,79 @@
 cmake_minimum_required(VERSION 3.22)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# project init
-project(JUCE_CMAKE_TEST_PLUGIN VERSION 0.1.0)
+# ----------------------------------------
+# VARIABLES
+set(PROJECT_NAME "CMAKE_JUCE_REACT")
+set(TARGET_NAME "WebJucePlugin")
+set(VERSION_NUMBER 0.1.0)
 
-add_subdirectory(_JUCE)
+# ----------------------------------------
 
-# juce init
-juce_add_plugin(AudioPlugin
-  COMPANY_NAME foster
-  PLUGIN_MANUFACTURER_CODE Fost
-  PLUGIN_CODE Fcm0
+# PROJECT INIT
+project(${PROJECT_NAME} VERSION ${VERSION_NUMBER})
 
+# PACKAGE INCLUDE
+add_subdirectory(include/JUCE JUCE)
+
+# JUCE CONFIG
+juce_add_plugin(${TARGET_NAME}
+  PRODUCT_NAME "${TARGET_NAME}"
+
+  # manufacturer
+  COMPANY_NAME "foster"
+  PLUGIN_MANUFACTURER_CODE "Fost"
+  BUNDLE_ID "audio.foster.webjuce"
+
+  # plugin
+  PLUGIN_NAME "CMake JUCE React"
+  PLUGIN_CODE "Fcm0"
+  VST3_CATEGORIES Fx
+  AU_MAIN_TYPE kAudioUnitType_Effect
+
+  # executable
+  FORMATS Standalone VST3 AU Standalone
+  COPY_PLUGIN_AFTER_BUILD TRUE
   NEEDS_WEBVIEW2 TRUE
-
-  FORMATS VST3 Standalone
-  PRODUCT_NAME "WebkitPlugin"
 )
 
-juce_generate_juce_header(AudioPlugin)
-
-# compile options
-target_compile_definitions(AudioPlugin
+target_compile_definitions(${TARGET_NAME}
   PUBLIC
-  JUCE_USE_CURL=0
-  JUCE_VST3_CAN_REPLACE_VST2=0
-  DONT_SET_USING_JUCE_NAMESPACE=1
   JUCE_WEB_BROWSER=1
   JUCE_USE_WIN_WEBVIEW2_WITH_STATIC_LINKING=1
+  JUCE_USE_CURL=0
+  JUCE_VST3_CAN_REPLACE_VST2=0
+
+  DONT_SET_USING_JUCE_NAMESPACE=1
+
+  CMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}"
+  VERSION="${CURRENT_VERSION}"
+
+  PRODUCT_NAME_WITHOUT_VERSION="${TARGET_NAME}"
 )
 
-file(GLOB_RECURSE HEADER_FILES src/*.h)
+# ADD FILES
+file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+)
+target_sources(${TARGET_NAME} PRIVATE ${SOURCE_FILES})
 
-# add source files
-target_sources(AudioPlugin
+# BINARY DATA
+file(GLOB_RECURSE BINARY_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/assets/*")
+list(FILTER BINARY_FILES EXCLUDE REGEX "/\\.DS_Store$")
+juce_add_binary_data(BinaryData SOURCES ${BINARY_FILES})
+
+# ADD LIBRARIES
+target_link_libraries(${TARGET_NAME}
   PRIVATE
-  ${HEADER_FILES} # make sure header files appear in solution
+  BinaryData
 
-  src/PluginEditor.cpp
-  src/PluginProcessor.cpp
-  src/ipc/Routes.cpp
-  src/utils/ZipUtils.cpp
-)
-
-# register source tree
-# file(GLOB_RECURSE SOURCE_FILES src/*)
-# source_group("0_SRC" TREE ../src PREFIX "0_SRC" FILES ${SOURCE_FILES})
-
-# add binary data
-juce_add_binary_data(AudioPluginData
-  SOURCES
-  assets/client.zip
-)
-
-target_link_libraries(AudioPlugin
-  PRIVATE
-  AudioPluginData
+  juce::juce_audio_devices
+  juce::juce_audio_formats
   juce::juce_audio_utils
+  juce::juce_audio_processors
+  juce::juce_gui_basics
   juce::juce_gui_extra
 
   PUBLIC

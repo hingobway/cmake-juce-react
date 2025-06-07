@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <string>
 
-#include <JuceHeader.h>
+#include <juce_core/juce_core.h>
 
 class Routes
 {
